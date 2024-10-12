@@ -19,9 +19,12 @@ public class PlayerGroundedState : PlayerState
         base.Update();
         
         if (Input.GetKeyDown(KeyCode.LeftShift))
-            stateMachine.ChangeState(player.dashState); 
+            stateMachine.ChangeState(player.dashState);     
         
         if (Input.GetKeyDown(KeyCode.Space) && player.IsGroundDetected())
             stateMachine.ChangeState(player.jumpState);
+
+        if (player.IsWallDetected() && !player.IsGroundDetected())
+            stateMachine.ChangeState(player.wallSlide);
     }
 }
