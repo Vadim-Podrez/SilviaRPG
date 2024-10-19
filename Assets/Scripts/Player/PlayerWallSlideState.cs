@@ -20,7 +20,7 @@ public class PlayerWallSlideState : PlayerState
     }
     public override void Update()
     {
-        base.Update();
+        base.Update(); 
         
         if(player.IsWallDetected() == false)
             stateMachine.ChangeState(player.airState);
