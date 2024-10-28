@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
         
         dashUsageTimer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashUsageTimer < 0)
+        if (Input.GetKeyDown(KeyCode.F) && dashUsageTimer < 0)
         {
             dashUsageTimer = dashCooldown;
             dashDirection = Input.GetAxisRaw("Horizontal");
