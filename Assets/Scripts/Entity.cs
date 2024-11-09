@@ -8,11 +8,20 @@ public class Entity : MonoBehaviour
     
     #region Components
     public Animator animator { get; private set; }
-    public Rigidbody2D rb { get; private set; }
+    public Rigidbody2D rb { get; private set; } 
+    public EntityFX entityFX { get; private set; }
     
     #endregion
+
+    [Header("Knockback Info")] 
+    [SerializeField] protected Vector2 KnockbackDirection;
+    [SerializeField] protected float KnockbackDuration;
+    protected bool isKnockedBack = false;
+    
     
     [Header("Collision Info")] 
+    public Transform attackCheck;
+    public float attackCheckRadius;
     [SerializeField] protected Transform groundCheck;
     [SerializeField] protected float groundCheckDistance;
     [SerializeField] protected Transform wallCheck;
@@ -21,7 +30,7 @@ public class Entity : MonoBehaviour
 
     #region Facing properties
     public int facingDirection { get; private set; } = 1;
-    protected bool facingRight = true;
+    public bool isFacingRight { get; private set; } = true;
     
     #endregion
 
@@ -32,6 +41,7 @@ public class Entity : MonoBehaviour
 
     protected virtual void Start()
     {
+        entityFX = GetComponent<EntityFX>();
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -40,11 +50,37 @@ public class Entity : MonoBehaviour
     {
         
     }
+
+    public virtual void Damage()
+    {
+        entityFX.StartCoroutine("FlashFX");
+        StartCoroutine("HitKnockback");
+    }
+    
+
+    protected virtual IEnumerator HitKnockback()
+    {
+        isKnockedBack = true;
+        rb.velocity = new Vector2(KnockbackDirection.x * -facingDirection, KnockbackDirection.y);
+        yield return new WaitForSeconds(KnockbackDuration);
+        isKnockedBack = false;  
+    }
     
     #region Velocity
-    public void SetZeroVelocity() => rb.velocity = new Vector2(0, 0);
+    public void SetZeroVelocity()
+    {
+        if (isKnockedBack)
+            return;
+        
+        rb.velocity = new Vector2(0, 0);
+    }
+
     public void SetVelocity(float _xVelocity, float _yVelocity)
     {
+        
+        if (isKnockedBack)
+            return;
+        
         rb.velocity = new Vector2(_xVelocity, _yVelocity);
         FlipController(_xVelocity);
     }
@@ -60,7 +96,8 @@ public class Entity : MonoBehaviour
     {
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance, wallCheck.position.y));
-    }
+        Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius); 
+    } 
     #endregion  
     
     #region Flip
@@ -68,13 +105,13 @@ public class Entity : MonoBehaviour
     public virtual void Flip()
     {
         facingDirection *= -1;
-        facingRight = !facingRight;
+        isFacingRight = !isFacingRight;
         transform.Rotate(0, 180,0);
     }
 
     public virtual void FlipController(float _x)
     {
-        if ((_x > 0 && !facingRight) || (_x < 0 && facingRight))
+        if ((_x > 0 && !isFacingRight) || (_x < 0 && isFacingRight))
         {
             Flip();
         }

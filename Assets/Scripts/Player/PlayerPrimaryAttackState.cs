@@ -20,14 +20,16 @@ public class PlayerPrimaryAttackState : PlayerState
     {
         base.Enter();
 
+        xInput = 0;
+
         if (comboCounter > 2 || Time.time >= lastTimeAttacked + comboWindow) 
             comboCounter = 0; 
         
         player.animator.SetInteger("ComboCounter", comboCounter);
 
-        #region Attack Diraction
+        #region Attack Direction
 
-        float attackDirection = player.facingDirection;
+        float attackDirection = player.isFacingRight ? 1 : -1;
 
         if (xInput != 0) 
             attackDirection = xInput;

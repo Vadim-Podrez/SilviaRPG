@@ -26,4 +26,9 @@ public class PlayerMoveState : PlayerGroundedState
             stateMachine.ChangeState(player.idleState);
     }
     
+    /*public void SetGravityScale(float scale)
+    {
+        rb.gravityScale = scale;
+    }*/
+    
 }

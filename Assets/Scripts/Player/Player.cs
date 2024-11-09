@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class Player : Entity
 {
-    [Header("Attack Movement")] 
-    public Vector2[] attackMovement;    
+    [Header("Attack Details")] 
+    public Vector2[] attackMovement;
+
+    public float counterAttackDuration = .2f;
+    
     public bool isBusy {get; private set;}
     
     [Header("Move Info")] 
@@ -28,7 +31,8 @@ public class Player : Entity
     public PlayerWallSlideState wallSlide { get; private set; } 
     public PlayerWallJumpState wallJump{ get; private set; }
     public PlayerDashState dashState { get; private set; }
-    public PlayerPrimaryAttackState primaryAttackState { get; private set; }
+    public PlayerPrimaryAttackState primaryAttack { get; private set; }
+    public PlayerCounterAttackState counterAttack { get; private set; }
     
     #endregion
 
@@ -44,7 +48,10 @@ public class Player : Entity
         dashState = new PlayerDashState(this, stateMachine, "Dash");
         wallSlide = new PlayerWallSlideState(this, stateMachine, "WallSlide");
         wallJump = new PlayerWallJumpState(this, stateMachine, "Jump");
-        primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
+        
+        primaryAttack = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
+        counterAttack = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
+        
     }
 
     protected override void Start()
@@ -53,11 +60,11 @@ public class Player : Entity
         
         stateMachine.Initialize(idleState);
     } 
+        
     
     protected override void Update()
     {
         base.Update();
-        
         stateMachine.currentState.Update();
         
         CheckForDashInput(); 

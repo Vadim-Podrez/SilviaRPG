@@ -25,5 +25,7 @@ public class ParallaxBackground : MonoBehaviour
         
         if (distanceMoved > xPosition + lenght) xPosition += lenght;
         else if (distanceMoved < xPosition - lenght) xPosition -= lenght;
+        
+        transform.position = new Vector3(transform.position.x, cam.transform.position.y + 11, transform.position.z);
     }
 }
