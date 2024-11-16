@@ -10,6 +10,7 @@ public class Enemy : Entity
     [Header("Move Info")]
     public float moveSpeed;
     public float idleTime;
+    public float defaultMoveSpeed;
     
     [Header("Attack Info")]
     public float attackDistance;
@@ -31,6 +32,8 @@ public class Enemy : Entity
     {
         base.Awake();
         stateMachine = new EnemyStateMachine();
+        
+        defaultMoveSpeed = moveSpeed;
     }
 
     protected override void Update()
@@ -40,18 +43,41 @@ public class Enemy : Entity
         
     }
 
+    public virtual void FreezeTime(bool _timeFrozen)
+    {
+        if (_timeFrozen)
+        {
+            moveSpeed = 0;
+            animator.speed = 0;
+        }
+        else
+        {
+            moveSpeed = defaultMoveSpeed;
+            animator.speed = 1;
+        }
+    }
+
+    public virtual IEnumerator FreezeTimerFor(float _seconds)
+    {
+        FreezeTime(true);
+        yield return new WaitForSeconds(_seconds);
+        FreezeTime(false);
+    }
+    
+    #region Counter Attack Window
+    
     public virtual void OpenCounterAttackWindow()
     {
         canBeStunned = true;
         counterAttackWindowImage.SetActive(true);
     }
-
     public virtual void CloseCounterAttackWindow()
     {
         canBeStunned = false;
         counterAttackWindowImage.SetActive(false);
     }
-
+    #endregion
+        
     public virtual bool CanBeStunned()
     {
         if (canBeStunned)

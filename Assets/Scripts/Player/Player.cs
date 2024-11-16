@@ -1,14 +1,16 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class Player : Entity
 {
+    
     [Header("Attack Details")] 
     public Vector2[] attackMovement;
+    public float swordReturnImpact;
 
     public float counterAttackDuration = .2f;
-    
     public bool isBusy {get; private set;}
     
     [Header("Move Info")] 
@@ -16,11 +18,12 @@ public class Player : Entity
     public float jumpForce;
     
     [Header("Dash Info")] 
-    [SerializeField] private float dashCooldown;
-    private float dashUsageTimer; 
     public float dashSpeed;
     public float dashDuration;
     public float dashDirection { get; private set; }
+    
+    public SkillManager skill { get; private set; }
+    public GameObject sword { get; private set; }
     
     #region States
     public PlayerStateMachine stateMachine { get; private set; }
@@ -33,6 +36,8 @@ public class Player : Entity
     public PlayerDashState dashState { get; private set; }
     public PlayerPrimaryAttackState primaryAttack { get; private set; }
     public PlayerCounterAttackState counterAttack { get; private set; }
+    public PlayerAimState aimSwordState { get; private set; }
+    public PlayerCatchSwordState catchSwordState { get; private set; }
     
     #endregion
 
@@ -51,16 +56,30 @@ public class Player : Entity
         
         primaryAttack = new PlayerPrimaryAttackState(this, stateMachine, "Attack");
         counterAttack = new PlayerCounterAttackState(this, stateMachine, "CounterAttack");
+        aimSwordState = new PlayerAimState(this, stateMachine, "AimSword");
+        catchSwordState = new PlayerCatchSwordState(this, stateMachine, "CatchSword");
         
-    }
+    }   
 
     protected override void Start()
     {
         base.Start();
+
+        skill = SkillManager.instance;
         
         stateMachine.Initialize(idleState);
-    } 
-        
+    }
+
+    public void AssignNewSword(GameObject _sword)
+    {
+        sword = _sword;
+    }
+
+    public void CatchTheSword()
+    {
+        stateMachine.ChangeState(catchSwordState);
+        Destroy(sword);
+    }
     
     protected override void Update()
     {
@@ -85,12 +104,9 @@ public class Player : Entity
     {
         if (IsWallDetected())
             return;
-        
-        dashUsageTimer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.F) && dashUsageTimer < 0)
+        if (Input.GetKeyDown(KeyCode.F) && SkillManager.instance.dash.CanUseSkill())
         {
-            dashUsageTimer = dashCooldown;
             dashDirection = Input.GetAxisRaw("Horizontal");
 
             if (dashDirection == 0)

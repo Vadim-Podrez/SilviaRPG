@@ -6,6 +6,7 @@ public class ParallaxBackground : MonoBehaviour
 {
     private GameObject cam;
     [SerializeField] private float parallaxEffect;
+    [SerializeField] private float yOffset;
     
     private float lenght;
     private float xPosition;
@@ -26,6 +27,6 @@ public class ParallaxBackground : MonoBehaviour
         if (distanceMoved > xPosition + lenght) xPosition += lenght;
         else if (distanceMoved < xPosition - lenght) xPosition -= lenght;
         
-        transform.position = new Vector3(transform.position.x, cam.transform.position.y + 11, transform.position.z);
+        transform.position = new Vector3(transform.position.x, cam.transform.position.y + yOffset, transform.position.z);
     }
 }
