@@ -3883,7 +3883,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.583271, y: -0.9143934, z: -9.9955}
+  m_LocalPosition: {x: -8.585563, y: -0.9143934, z: -9.9955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5243,6 +5243,7 @@ GameObject:
   - component: {fileID: 947224086}
   - component: {fileID: 947224089}
   - component: {fileID: 947224090}
+  - component: {fileID: 947224091}
   m_Layer: 0
   m_Name: SkillManager
   m_TagString: Untagged
@@ -5305,7 +5306,7 @@ MonoBehaviour:
   cooldown: 0
   clonePrefab: {fileID: 157161221930081387, guid: 31cc682cc5c1afa438304519b2f9174e, type: 3}
   cloneDuration: 1.5
-  canAttack: 0
+  canAttack: 1
 --- !u!114 &947224090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5338,6 +5339,26 @@ MonoBehaviour:
   numberOfAimDots: 20
   aimDotPrefab: {fileID: 3459316714329081787, guid: 55602c0afe628db4f8286c2eba53b5dd, type: 3}
   aimDotsParent: {fileID: 81982231}
+--- !u!114 &947224091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947224085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c04c09db08d2b49acf4e8b2bfc37e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 0
+  blackholePrefab: {fileID: 3715872788085373249, guid: 2af3a264494f6a64fb39db1c0a5724c4, type: 3}
+  blackholeDuration: 4
+  maxSize: 15
+  growSpeed: 3
+  shrinkSpeed: 6
+  amountOfAttacks: 5
+  cloneAttackCooldown: 0.35
 --- !u!1 &954933714
 GameObject:
   m_ObjectHideFlags: 0
@@ -8656,7 +8677,7 @@ Transform:
   m_GameObject: {fileID: 1856293811}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -8.583271, y: -0.9143934, z: -9.9955}
+  m_LocalPosition: {x: -8.585563, y: -0.9143934, z: -9.9955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
